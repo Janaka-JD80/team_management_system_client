@@ -1,0 +1,16 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Route API requests to the PHP proxy script
+  RewriteRule ^api/(.*)$ proxy.php?path=api/$1 [QSA,L]
+
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_URI} ^/assets/ [OR]
+  RewriteCond %{REQUEST_URI} \.(js|mjs|css|png|jpg|jpeg|gif|svg|ico|webp|json|map|txt|woff|woff2|ttf|eot|mp3|mp4|webm)$ [NC]
+  RewriteRule ^ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /index.html [L]
+</IfModule>
+
