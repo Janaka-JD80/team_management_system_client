@@ -12,7 +12,7 @@ export function useLogin() {
     mutationFn: (credentials: UserLogin) => authApi.login(credentials),
     onSuccess: (data) => {
       setSession(data.user);
-      navigate('/dashboard');
+      navigate('/');
     },
   });
 }
@@ -25,7 +25,7 @@ export function useRegister() {
     mutationFn: (userData: UserCreate) => authApi.register(userData),
     onSuccess: (data) => {
       setSession(data.user);
-      navigate('/dashboard');
+      navigate('/');
     },
   });
 }

@@ -1,15 +1,18 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useReport, useCreateDraft, useUpdateReport, useSubmitReport } from '@/hooks/useReportQueries';
+import { useAllProjects } from '@/hooks/useProjectQueries';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent } from '@/components/ui/card';
+import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { TaskCompletedTable, emptyTaskCompleted } from '@/components/reports/TaskCompletedTable';
 import { TaskPlannedList, emptyTaskPlanned } from '@/components/reports/TaskPlannedList';
 import { BlockersAchievementsForm } from '@/components/reports/BlockersAchievementsForm';
 import type { ReportCreate } from '@/types/reports';
-import { ChevronLeft, Save, Send } from 'lucide-react';
+import { ChevronLeft, Save, Send, Briefcase, Clock, FileText } from 'lucide-react';
 
 export default function ReportEditor() {
   const { id } = useParams<{ id: string }>();
@@ -17,6 +20,8 @@ export default function ReportEditor() {
   const isEditing = !!id && id !== 'new';
   
   const { data: existingReport, isLoading } = useReport(isEditing ? id : undefined);
+  const { data: projectsData = [] } = useAllProjects();
+  
   const createDraft = useCreateDraft();
   const updateReport = useUpdateReport();
   const submitReport = useSubmitReport();
@@ -24,10 +29,18 @@ export default function ReportEditor() {
   const [formData, setFormData] = useState<ReportCreate>({
     week_start_date: '',
     week_end_date: '',
+    project_id: null,
     tasks_completed: [{ ...emptyTaskCompleted }],
     tasks_planned: [{ ...emptyTaskPlanned }],
     blockers: [],
     achievements: [],
+    hours_worked_by_type: {
+      Development: 0,
+      Testing: 0,
+      Meetings: 0,
+      Documentation: 0
+    },
+    optional_notes: ''
   });
 
   useEffect(() => {
@@ -36,13 +49,13 @@ export default function ReportEditor() {
       setFormData({
         week_start_date: existingReport.week_start_date,
         week_end_date: existingReport.week_end_date,
-        project_id: existingReport.project_id,
+        project_id: existingReport.project_id || null,
         tasks_completed: v.tasks_completed.length ? v.tasks_completed : [{ ...emptyTaskCompleted }],
         tasks_planned: v.tasks_planned.length ? v.tasks_planned : [{ ...emptyTaskPlanned }],
         blockers: v.blockers.length ? v.blockers : [],
         achievements: v.achievements.length ? v.achievements : [],
-        hours_worked_by_type: v.hours_worked_by_type,
-        optional_notes: v.optional_notes,
+        hours_worked_by_type: v.hours_worked_by_type || { Development: 0, Testing: 0, Meetings: 0, Documentation: 0 },
+        optional_notes: v.optional_notes || '',
       });
     }
   }, [existingReport]);
@@ -79,34 +92,41 @@ export default function ReportEditor() {
   if (isEditing && isLoading) {
     return (
       <div className="flex justify-center items-center h-64 text-muted-foreground">
-        <div className="animate-pulse flex items-center gap-2">
-          <div className="w-4 h-4 bg-primary rounded-full animate-bounce" />
-          <div className="w-4 h-4 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
-          <div className="w-4 h-4 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
-        </div>
+        Loading...
       </div>
     );
   }
 
   const isSaving = createDraft.isPending || updateReport.isPending || submitReport.isPending;
 
+  const updateHours = (type: string, value: string) => {
+    setFormData({
+      ...formData,
+      hours_worked_by_type: {
+        ...formData.hours_worked_by_type,
+        [type]: Number(value)
+      }
+    });
+  };
+
   return (
-    <div className="max-w-5xl mx-auto pb-16 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="max-w-6xl mx-auto pb-16 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 sticky top-16 z-40 bg-background/80 backdrop-blur-md py-4 -mx-4 px-4 sm:-mx-0 sm:px-0 border-b sm:border-b-0 border-border">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 sticky top-16 z-40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 py-4 -mx-4 px-4 sm:-mx-0 sm:px-0 border-b border-border">
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" onClick={() => navigate('/reports')} className="mr-2">
+          <Button variant="ghost" size="icon" onClick={() => navigate('/reports')} className="mr-2 shrink-0">
             <ChevronLeft className="w-5 h-5" />
           </Button>
           <div>
             <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
               {isEditing ? 'Edit Report' : 'New Weekly Report'}
             </h2>
+            <p className="text-muted-foreground text-sm mt-1">Fill out your weekly progress and submit it for review.</p>
           </div>
         </div>
         <div className="flex gap-3">
-          <Button variant="outline" onClick={handleSaveDraft} disabled={isSaving} className="bg-white">
+          <Button variant="outline" onClick={handleSaveDraft} disabled={isSaving} className="bg-background">
             <Save className="w-4 h-4 mr-2" />
             Save Draft
           </Button>
@@ -117,48 +137,118 @@ export default function ReportEditor() {
         </div>
       </div>
 
-      {/* Date Range Selection */}
-      <Card className="shadow-sm">
-        <CardContent className="pt-6">
-          <div className="grid gap-6 md:grid-cols-2">
-            <div className="space-y-2">
-              <Label>Week Start Date</Label>
-              <Input 
-                type="date" 
-                value={formData.week_start_date} 
-                onChange={(e) => setFormData({ ...formData, week_start_date: e.target.value })} 
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+        
+        {/* Left Column: Dates & Project */}
+        <div className="md:col-span-4 space-y-6">
+          <Card className="shadow-sm">
+            <CardHeader className="pb-3 border-b">
+              <CardTitle className="text-lg flex items-center gap-2">
+                <Briefcase className="w-5 h-5" /> Report Metadata
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="pt-6 space-y-4">
+              <div className="space-y-2">
+                <Label>Project / Category</Label>
+                <Select 
+                  value={formData.project_id || 'none'} 
+                  onValueChange={(v) => setFormData({ ...formData, project_id: v === 'none' ? null : v })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a project" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none">No Project / General</SelectItem>
+                    {projectsData.map(p => (
+                      <SelectItem key={p.project_id} value={p.project_id}>{p.name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label>Week Start Date</Label>
+                <Input 
+                  type="date" 
+                  value={formData.week_start_date} 
+                  onChange={(e) => setFormData({ ...formData, week_start_date: e.target.value })} 
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Week End Date</Label>
+                <Input 
+                  type="date" 
+                  value={formData.week_end_date} 
+                  onChange={(e) => setFormData({ ...formData, week_end_date: e.target.value })} 
+                />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="shadow-sm">
+            <CardHeader className="pb-3 border-b">
+              <CardTitle className="text-lg flex items-center gap-2">
+                <Clock className="w-5 h-5" /> Hours Breakdown
+              </CardTitle>
+              <CardDescription>Approximate hours spent per activity.</CardDescription>
+            </CardHeader>
+            <CardContent className="pt-6 space-y-4">
+              {['Development', 'Testing', 'Meetings', 'Documentation'].map((type) => (
+                <div key={type} className="flex items-center justify-between">
+                  <Label className="font-normal">{type}</Label>
+                  <div className="flex items-center gap-2">
+                    <Input 
+                      type="number" 
+                      min="0"
+                      className="w-20 text-right"
+                      value={formData.hours_worked_by_type?.[type] || 0}
+                      onChange={(e) => updateHours(type, e.target.value)}
+                    />
+                    <span className="text-sm text-muted-foreground w-6">hrs</span>
+                  </div>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Right Column: Main Content */}
+        <div className="md:col-span-8 space-y-6">
+          <BlockersAchievementsForm 
+            blockers={formData.blockers} 
+            achievements={formData.achievements} 
+            onChangeBlockers={(b) => setFormData({ ...formData, blockers: b })} 
+            onChangeAchievements={(a) => setFormData({ ...formData, achievements: a })} 
+          />
+
+          <TaskCompletedTable 
+            tasks={formData.tasks_completed} 
+            onChange={(tasks) => setFormData({ ...formData, tasks_completed: tasks })} 
+          />
+
+          <TaskPlannedList 
+            tasks={formData.tasks_planned} 
+            onChange={(tasks) => setFormData({ ...formData, tasks_planned: tasks })} 
+          />
+
+          <Card className="shadow-sm">
+            <CardHeader className="pb-3 border-b">
+              <CardTitle className="text-lg flex items-center gap-2">
+                <FileText className="w-5 h-5" /> Optional Notes
+              </CardTitle>
+              <CardDescription>Any other context, links, or remarks for your manager.</CardDescription>
+            </CardHeader>
+            <CardContent className="pt-6">
+              <Textarea 
+                placeholder="Add any extra notes here..." 
+                value={formData.optional_notes || ''}
+                onChange={(e) => setFormData({ ...formData, optional_notes: e.target.value })}
+                className="min-h-[120px]"
               />
-            </div>
-            <div className="space-y-2">
-              <Label>Week End Date</Label>
-              <Input 
-                type="date" 
-                value={formData.week_end_date} 
-                onChange={(e) => setFormData({ ...formData, week_end_date: e.target.value })} 
-              />
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+            </CardContent>
+          </Card>
+        </div>
 
-      {/* Extracted Components */}
-      <TaskCompletedTable 
-        tasks={formData.tasks_completed} 
-        onChange={(tasks) => setFormData({ ...formData, tasks_completed: tasks })} 
-      />
-
-      <TaskPlannedList 
-        tasks={formData.tasks_planned} 
-        onChange={(tasks) => setFormData({ ...formData, tasks_planned: tasks })} 
-      />
-
-      <BlockersAchievementsForm 
-        blockers={formData.blockers} 
-        achievements={formData.achievements} 
-        onChangeBlockers={(b) => setFormData({ ...formData, blockers: b })} 
-        onChangeAchievements={(a) => setFormData({ ...formData, achievements: a })} 
-      />
-      
+      </div>
     </div>
   );
 }

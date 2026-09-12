@@ -10,6 +10,15 @@ import ReportHistory from '@/pages/reports/ReportHistory';
 import ReportEditor from '@/pages/reports/ReportEditor';
 import ReportDetail from '@/pages/reports/ReportDetail';
 import ManagerDashboard from '@/pages/reports/ManagerDashboard';
+import { useAuthStore } from '@/store/authStore';
+
+const IndexRoute = () => {
+  const { user } = useAuthStore();
+  if (user?.roles.includes('manager')) {
+    return <Navigate to="/dashboard" replace />;
+  }
+  return <Navigate to="/reports" replace />;
+};
 
 export const router = createBrowserRouter([
   {
@@ -30,7 +39,7 @@ export const router = createBrowserRouter([
       { path: 'reports/:id/edit', element: <ReportEditor /> },
       { path: 'reports/:id/view', element: <ReportDetail /> },
       { path: 'reports/new', element: <ReportEditor /> },
-      { index: true, element: <Navigate to="/dashboard" replace /> }
+      { index: true, element: <IndexRoute /> }
     ],
   },
 ]);
