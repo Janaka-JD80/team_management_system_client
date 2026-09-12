@@ -17,3 +17,16 @@ http.interceptors.request.use(
     return Promise.reject(error);
   }
 );
+
+// Response interceptor to unwrap StandardResponse
+http.interceptors.response.use(
+  (response) => {
+    if (response.data && typeof response.data.status === 'boolean' && 'data' in response.data) {
+      response.data = response.data.data;
+    }
+    return response;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);

@@ -1,12 +1,12 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { jwtDecode } from 'jwt-decode';
+
 import type { JwtPayload } from '@/types/auth';
 
 interface AuthState {
   isAuthenticated: boolean;
   user: JwtPayload | null;
-  setSession: (token: string) => void;
+  setSession: (user: JwtPayload) => void;
   clearSession: () => void;
 }
 
@@ -16,20 +16,11 @@ export const useAuthStore = create<AuthState>()(
       isAuthenticated: false,
       user: null,
 
-      setSession: (token: string) => {
-        try {
-          const decoded = jwtDecode<JwtPayload>(token);
-          set({
-            isAuthenticated: true,
-            user: decoded,
-          });
-        } catch (error) {
-          console.error("Failed to decode token", error);
-          set({
-            isAuthenticated: false,
-            user: null,
-          });
-        }
+      setSession: (user: JwtPayload) => {
+        set({
+          isAuthenticated: true,
+          user: user,
+        });
       },
 
       clearSession: () => {

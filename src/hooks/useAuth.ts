@@ -11,7 +11,7 @@ export function useLogin() {
   return useMutation({
     mutationFn: (credentials: UserLogin) => authApi.login(credentials),
     onSuccess: (data) => {
-      setSession(data.access_token);
+      setSession(data.user);
       navigate('/dashboard');
     },
   });
@@ -24,7 +24,7 @@ export function useRegister() {
   return useMutation({
     mutationFn: (userData: UserCreate) => authApi.register(userData),
     onSuccess: (data) => {
-      setSession(data.access_token);
+      setSession(data.user);
       navigate('/dashboard');
     },
   });
