@@ -36,6 +36,7 @@ export interface ReportResponse {
   user_id: string;
   user_name?: string | null;
   project_id?: string | null;
+  project_name?: string | null;
   week_start_date: string; // date string YYYY-MM-DD
   week_end_date: string;
   current_status_id: string;
@@ -60,6 +61,7 @@ export interface ReportVersionResponse {
 
 export interface ReportWithLatestVersionResponse extends ReportResponse {
   latest_version: ReportVersionResponse;
+  past_versions?: ReportVersionResponse[];
 }
 
 export interface ReportCreate {
