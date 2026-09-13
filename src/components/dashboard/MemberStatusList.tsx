@@ -1,4 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { useNavigate } from 'react-router-dom';
 import type { MemberStatus } from '@/types/analytics';
 import { Badge } from '@/components/ui/badge';
 
@@ -7,6 +8,8 @@ interface MemberStatusListProps {
 }
 
 export function MemberStatusList({ statusData }: MemberStatusListProps) {
+  const navigate = useNavigate();
+
   const getStatusColor = (status: string) => {
     const s = status.toLowerCase();
     if (s.includes('approved')) return 'bg-emerald-500/10 text-emerald-600 border-emerald-200';
@@ -30,12 +33,16 @@ export function MemberStatusList({ statusData }: MemberStatusListProps) {
         ) : (
           <div className="space-y-4">
             {statusData.map((member, idx) => (
-              <div key={`${member.user_id}-${idx}`} className="flex items-center justify-between">
+              <div 
+                key={`${member.user_id}-${idx}`} 
+                className="flex items-center justify-between p-2 -mx-2 rounded-md hover:bg-muted/50 cursor-pointer transition-colors"
+                onClick={() => navigate(`/team/profile/${member.user_id}`)}
+              >
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-medium text-xs">
                     {member.full_name?.substring(0, 2).toUpperCase() || 'U'}
                   </div>
-                  <span className="text-sm font-medium">{member.full_name || 'Unknown User'}</span>
+                  <span className="text-sm font-medium hover:underline">{member.full_name || 'Unknown User'}</span>
                 </div>
                 <Badge variant="outline" className={`font-normal ${getStatusColor(member.status)}`}>
                   {member.status}

@@ -1,5 +1,5 @@
 import { http } from '@/lib/http';
-import type { DashboardSummaryResponse, DashboardChartsResponse } from '@/types/analytics';
+import type { DashboardSummaryResponse, DashboardChartsResponse, TeamMemberStatsResponse } from '@/types/analytics';
 
 export const analyticsApi = {
   getDashboardSummary: async (weekStartDate: string) => {
@@ -13,6 +13,11 @@ export const analyticsApi = {
     const response = await http.get<DashboardChartsResponse>('/analytics/charts', {
       params: { end_date: endDate },
     });
+    return response.data;
+  },
+
+  getTeamMemberStats: async (userId: string) => {
+    const response = await http.get<TeamMemberStatsResponse>(`/analytics/users/${userId}/stats`);
     return response.data;
   },
 };

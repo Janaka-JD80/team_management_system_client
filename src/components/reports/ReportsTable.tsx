@@ -82,7 +82,15 @@ export function ReportsTable({
               onClick={() => navigate(`/reports/${report.report_id}/view`)}
             >
               <TableCell className="font-medium">
-                {report.user_name || report.user_id}
+                <span 
+                  className="hover:underline cursor-pointer"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate(`/team/profile/${report.user_id}`);
+                  }}
+                >
+                  {report.user_name || report.user_id}
+                </span>
               </TableCell>
               <TableCell>{getProjectName(report.project_id)}</TableCell>
               <TableCell>{new Date(report.week_start_date).toLocaleDateString()}</TableCell>

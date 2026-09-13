@@ -30,3 +30,14 @@ export interface DashboardChartsResponse {
   workload_by_project: Record<string, number>;
   recent_activity: ActivityFeedItem[];
 }
+
+export interface TeamMemberStatsResponse {
+  user_id: string;
+  full_name: string;
+  total_reports: number;
+  total_tasks_completed: number;
+  avg_tasks_per_week: number;
+  total_hours_logged: number;
+  tasks_completed_trend: LineChartDataPoint[];
+  time_by_task_type: Record<string, number>;
+}

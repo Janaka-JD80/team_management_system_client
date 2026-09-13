@@ -16,3 +16,11 @@ export function useDashboardCharts(endDate: string | undefined) {
     enabled: !!endDate,
   });
 }
+
+export function useTeamMemberStats(userId: string | undefined) {
+  return useQuery({
+    queryKey: ['analytics', 'teamMember', userId],
+    queryFn: () => analyticsApi.getTeamMemberStats(userId!),
+    enabled: !!userId,
+  });
+}

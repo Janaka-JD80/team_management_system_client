@@ -10,6 +10,7 @@ import ReportHistory from '@/pages/reports/ReportHistory';
 import ReportEditor from '@/pages/reports/ReportEditor';
 import ReportDetail from '@/pages/reports/ReportDetail';
 import ManagerDashboard from '@/pages/reports/ManagerDashboard';
+import TeamMemberProfile from '@/pages/reports/TeamMemberProfile';
 import SettingsLayout from '@/pages/settings/SettingsLayout';
 import { useAuthStore } from '@/store/authStore';
 import { AdminRoute } from '@/components/auth/AdminRoute';
@@ -37,6 +38,7 @@ export const router = createBrowserRouter([
     children: [
       { path: 'dashboard', element: <Dashboard /> },
       { path: 'team-reports', element: <ManagerDashboard /> },
+      { path: 'team/profile/:id', element: <TeamMemberProfile /> },
       { path: 'reports', element: <ReportHistory /> },
       { path: 'reports/:id/edit', element: <ReportEditor /> },
       { path: 'reports/:id/view', element: <ReportDetail /> },
