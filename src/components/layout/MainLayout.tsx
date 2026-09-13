@@ -1,6 +1,6 @@
 import { Outlet, useNavigate, Link } from 'react-router-dom';
 import { useAuthStore } from '@/store/authStore';
-import { LogOut, LayoutDashboard, FileText, Users } from 'lucide-react';
+import { LogOut, LayoutDashboard, FileText, Users, Settings } from 'lucide-react';
 import { PermissionGuard } from '@/components/auth/PermissionGuard';
 
 export function MainLayout() {
@@ -39,6 +39,12 @@ export function MainLayout() {
                   Team Reports
                 </Link>
               </PermissionGuard>
+              {user?.roles.includes('admin') && (
+                <Link to="/settings" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
+                  <Settings className="w-4 h-4" />
+                  Settings
+                </Link>
+              )}
             </nav>
           </div>
           <div className="flex items-center gap-4">

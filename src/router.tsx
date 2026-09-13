@@ -10,7 +10,9 @@ import ReportHistory from '@/pages/reports/ReportHistory';
 import ReportEditor from '@/pages/reports/ReportEditor';
 import ReportDetail from '@/pages/reports/ReportDetail';
 import ManagerDashboard from '@/pages/reports/ManagerDashboard';
+import SettingsLayout from '@/pages/settings/SettingsLayout';
 import { useAuthStore } from '@/store/authStore';
+import { AdminRoute } from '@/components/auth/AdminRoute';
 
 const IndexRoute = () => {
   const { user } = useAuthStore();
@@ -39,6 +41,7 @@ export const router = createBrowserRouter([
       { path: 'reports/:id/edit', element: <ReportEditor /> },
       { path: 'reports/:id/view', element: <ReportDetail /> },
       { path: 'reports/new', element: <ReportEditor /> },
+      { path: 'settings', element: <AdminRoute><SettingsLayout /></AdminRoute> },
       { index: true, element: <IndexRoute /> }
     ],
   },
