@@ -8,6 +8,8 @@ import type { ReportResponse } from '@/types/reports';
 import { DashboardFilters } from '@/components/reports/DashboardFilters';
 import { ReportsTable } from '@/components/reports/ReportsTable';
 import { ReviewDialog } from '@/components/reports/ReviewDialog';
+import { TeamSummaryTab } from '@/components/reports/TeamSummaryTab';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export default function ManagerDashboard() {
   // Filters state
@@ -90,43 +92,56 @@ export default function ManagerDashboard() {
         <p className="text-muted-foreground mt-1">Review and analyze reports submitted by your team.</p>
       </div>
 
-      <Card>
-        <CardHeader className="pb-4">
-          <CardTitle className="text-lg">Filters & Search</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <DashboardFilters 
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            projectIdFilter={projectIdFilter}
-            setProjectIdFilter={setProjectIdFilter}
-            statusFilter={statusFilter}
-            setStatusFilter={setStatusFilter}
-            date={date}
-            setDate={setDate}
-            projectsData={projectsData}
-            setPage={setPage}
-          />
-        </CardContent>
-      </Card>
+      <Tabs defaultValue="submissions" className="space-y-6">
+        <TabsList className="bg-muted/50 p-1">
+          <TabsTrigger value="submissions">All Submissions</TabsTrigger>
+          <TabsTrigger value="summary">Weekly Team Summary</TabsTrigger>
+        </TabsList>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>All Submissions</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ReportsTable 
-            isLoading={isLoading}
-            filteredReports={filteredReports}
-            projectsData={projectsData}
-            page={page}
-            setPage={setPage}
-            limit={limit}
-            reportsLength={reports.length}
-            onOpenReview={handleOpenReview}
-          />
-        </CardContent>
-      </Card>
+        <TabsContent value="submissions" className="space-y-8 mt-0">
+          <Card>
+            <CardHeader className="pb-4">
+              <CardTitle className="text-lg">Filters & Search</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <DashboardFilters 
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+                projectIdFilter={projectIdFilter}
+                setProjectIdFilter={setProjectIdFilter}
+                statusFilter={statusFilter}
+                setStatusFilter={setStatusFilter}
+                date={date}
+                setDate={setDate}
+                projectsData={projectsData}
+                setPage={setPage}
+              />
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>All Submissions</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ReportsTable 
+                isLoading={isLoading}
+                filteredReports={filteredReports}
+                projectsData={projectsData}
+                page={page}
+                setPage={setPage}
+                limit={limit}
+                reportsLength={reports.length}
+                onOpenReview={handleOpenReview}
+              />
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="summary" className="mt-0">
+          <TeamSummaryTab />
+        </TabsContent>
+      </Tabs>
 
       <ReviewDialog 
         isOpen={isReviewDialogOpen}

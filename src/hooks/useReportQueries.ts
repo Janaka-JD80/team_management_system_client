@@ -33,6 +33,14 @@ export function useReportHistory(reportId: string | undefined) {
   });
 }
 
+export function useReportSummary(weekStartDate: string | undefined, section: string) {
+  return useQuery({
+    queryKey: ['report-summary', weekStartDate, section],
+    queryFn: () => reportsApi.getReportSummary(weekStartDate!, section),
+    enabled: !!weekStartDate && !!section,
+  });
+}
+
 export function useCreateDraft() {
   const queryClient = useQueryClient();
   return useMutation({

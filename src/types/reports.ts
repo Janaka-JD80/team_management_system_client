@@ -64,6 +64,12 @@ export interface ReportWithLatestVersionResponse extends ReportResponse {
   past_versions?: ReportVersionResponse[];
 }
 
+export interface ReportSummaryResponse {
+  user_id: string;
+  full_name?: string | null;
+  data: any[];
+}
+
 export interface ReportCreate {
   project_id?: string | null;
   week_start_date: string;

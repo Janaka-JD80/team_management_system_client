@@ -4,7 +4,8 @@ import type {
   ReportWithLatestVersionResponse, 
   ReportCreate, 
   ReportUpdate, 
-  ReportVersionResponse 
+  ReportVersionResponse,
+  ReportSummaryResponse
 } from '@/types/reports';
 
 export interface GetReportsParams {
@@ -61,6 +62,13 @@ export const reportsApi = {
 
   getReportHistory: async (reportId: string) => {
     const response = await http.get<ReportVersionResponse[]>(`/reports/${reportId}/history`);
+    return response.data;
+  },
+
+  getReportSummary: async (weekStartDate: string, section: string) => {
+    const response = await http.get<ReportSummaryResponse[]>('/reports/summary', {
+      params: { week_start_date: weekStartDate, section },
+    });
     return response.data;
   },
 };
