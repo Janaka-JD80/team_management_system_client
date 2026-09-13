@@ -9,6 +9,9 @@ import { useNavigate } from 'react-router-dom';
 import { SummaryCards } from '@/components/dashboard/SummaryCards';
 import { TasksTrendChart } from '@/components/dashboard/TasksTrendChart';
 import { TimeDistributionChart } from '@/components/dashboard/TimeDistributionChart';
+import { WorkloadChart } from '@/components/dashboard/WorkloadChart';
+import { MemberStatusList } from '@/components/dashboard/MemberStatusList';
+import { ActivityFeed } from '@/components/dashboard/ActivityFeed';
 
 const PIE_COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
 
@@ -58,8 +61,19 @@ export default function Dashboard() {
 
           {/* Charts Row - Bento Grid Row 2 */}
           <TasksTrendChart trendData={charts?.tasks_completed_trend} />
-          
           <TimeDistributionChart pieData={pieData} pieColors={PIE_COLORS} />
+
+          {/* Workload and Member Status - Bento Grid Row 3 */}
+          <WorkloadChart workloadData={charts?.workload_by_project} />
+          
+          <div className="md:col-span-4 h-full">
+            <MemberStatusList statusData={charts?.status_by_member} />
+          </div>
+
+          {/* Activity Feed - Bento Grid Row 4 */}
+          <div className="md:col-span-12">
+            <ActivityFeed activities={charts?.recent_activity} />
+          </div>
 
           {/* Quick Actions Row */}
           <div className="md:col-span-12 flex items-center justify-end gap-4 mt-4">
