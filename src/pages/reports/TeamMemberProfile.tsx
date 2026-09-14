@@ -94,7 +94,7 @@ export default function TeamMemberProfile() {
         </Button>
         <div>
           <h2 className="text-3xl font-bold tracking-tight flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+            <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center text-primary">
               {stats.full_name?.substring(0, 2).toUpperCase() || <User className="w-5 h-5" />}
             </div>
             {stats.full_name}

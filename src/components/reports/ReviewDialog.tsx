@@ -53,6 +53,7 @@ export function ReviewDialog({
             onClick={onSubmit} 
             variant={action === 'Approved' ? 'default' : 'destructive'}
             disabled={isPending || (action === 'Needs Correction' && !comment.trim())}
+            className='mb-3'
           >
             {isPending ? 'Submitting...' : action === 'Approved' ? 'Approve' : 'Request Changes'}
           </Button>

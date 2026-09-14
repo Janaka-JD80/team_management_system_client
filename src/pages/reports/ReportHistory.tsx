@@ -25,7 +25,10 @@ export default function ReportHistory() {
   
   const [page, setPage] = useState(1);
   const limit = 10;
-  const [date, setDate] = useState<DateRange | undefined>();
+  const [date, setDate] = useState<DateRange | undefined>({
+    from: new Date(),
+    to: new Date()
+  });
 
   const { data: reports = [], isLoading, isError } = useMyReports({
     skip: (page - 1) * limit,
@@ -64,7 +67,7 @@ export default function ReportHistory() {
           <CardTitle className="text-lg">Filter by Date Range</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center gap-4">
             <Popover>
               <PopoverTrigger asChild>
                 <Button
