@@ -196,7 +196,7 @@ export function RolesTab() {
           </div>
           <DialogFooter className="sticky bottom-0 bg-background pt-2 border-t">
             <Button variant="outline" onClick={() => setIsManagePermsOpen(false)}>Cancel</Button>
-            <Button onClick={handleSavePerms} disabled={assignPermsMutation.isPending}>
+            <Button className='mb-3' onClick={handleSavePerms} disabled={assignPermsMutation.isPending}>
               {assignPermsMutation.isPending ? 'Saving...' : 'Save Permissions'}
             </Button>
           </DialogFooter>

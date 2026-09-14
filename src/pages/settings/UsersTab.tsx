@@ -128,7 +128,7 @@ export function UsersTab() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsManageRolesOpen(false)}>Cancel</Button>
-            <Button onClick={handleSaveRoles} disabled={assignRolesMutation.isPending}>
+            <Button className='mb-3' onClick={handleSaveRoles} disabled={assignRolesMutation.isPending}>
               {assignRolesMutation.isPending ? 'Saving...' : 'Save Roles'}
             </Button>
           </DialogFooter>

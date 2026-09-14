@@ -17,7 +17,7 @@ import { AdminRoute } from '@/components/auth/AdminRoute';
 
 const IndexRoute = () => {
   const { user } = useAuthStore();
-  if (user?.roles.includes('manager')) {
+  if (user?.roles.includes('manager') || user?.roles.includes('admin')) {
     return <Navigate to="/dashboard" replace />;
   }
   return <Navigate to="/reports" replace />;

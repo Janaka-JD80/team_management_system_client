@@ -173,7 +173,7 @@ export function ProjectsTab() {
             </div>
             <DialogFooter>
               <Button type="button" variant="outline" onClick={() => setIsEditOpen(false)}>Cancel</Button>
-              <Button type="submit" disabled={updateMutation.isPending}>
+              <Button className='mb-3' type="submit" disabled={updateMutation.isPending}>
                 {updateMutation.isPending ? 'Saving...' : 'Save Changes'}
               </Button>
             </DialogFooter>
