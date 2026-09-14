@@ -2,6 +2,7 @@ import { Outlet, useNavigate, Link } from 'react-router-dom';
 import { useAuthStore } from '@/store/authStore';
 import { LogOut, LayoutDashboard, FileText, Users, Settings } from 'lucide-react';
 import { PermissionGuard } from '@/components/auth/PermissionGuard';
+import { AiChatWidget } from '@/components/chat/AiChatWidget';
 
 export function MainLayout() {
   const { user, clearSession } = useAuthStore();
@@ -62,9 +63,14 @@ export function MainLayout() {
         </div>
       </header>
 
-      <main className="flex-1 container mx-auto px-6 py-12">
+      <main className="flex-1 container mx-auto px-6 py-12 relative">
         <Outlet />
       </main>
+
+      {/* Render AI Chat Widget for users with Manager roles/permissions */}
+      <PermissionGuard allowedPermissions={['view:all_reports']}>
+        <AiChatWidget />
+      </PermissionGuard>
     </div>
   );
 }
