@@ -75,13 +75,6 @@ export default function Dashboard() {
             <ActivityFeed activities={charts?.recent_activity} />
           </div>
 
-          {/* Quick Actions Row */}
-          <div className="md:col-span-12 flex items-center justify-end gap-4 mt-4">
-            <Button variant="outline" size="lg" onClick={() => navigate('/team-reports')}>
-              <Users className="w-4 h-4 mr-2" /> View Team Reports
-            </Button>
-          </div>
-
         </div>
       )}
     </div>

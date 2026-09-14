@@ -36,6 +36,7 @@
   --radius: 0.5rem;
 
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-secondary: "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", "Fira Code", ui-monospace, SFMono-Regular, monospace;
 }
 
@@ -94,6 +95,7 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
   --font-sans: var(--font-sans);
+  --font-secondary: var(--font-secondary);
   --font-mono: var(--font-mono);
 }
 

@@ -31,7 +31,10 @@ export default function ManagerDashboard() {
   // Backend filters
   const [projectIdFilter, setProjectIdFilter] = useState<string>('all');
   const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [date, setDate] = useState<DateRange | undefined>();
+  const [date, setDate] = useState<DateRange | undefined>({
+    from: new Date(),
+    to: new Date()
+  });
 
   const { data: projectsData = [] } = useAllProjects();
   

@@ -31,7 +31,7 @@ export function RolesTab() {
   });
 
   const createMutation = useMutation({
-    mutationFn: rolesApi.createRole,
+    mutationFn: (data: { role_name: string, role_description?: string }) => rolesApi.createRole(data.role_name, data.role_description),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['roles'] });
       setIsCreateOpen(false);
@@ -56,7 +56,10 @@ export function RolesTab() {
 
   const handleCreate = (e: React.FormEvent) => {
     e.preventDefault();
-    createMutation.mutate(formData.name, formData.description);
+    createMutation.mutate({ 
+      role_name: formData.name, 
+      role_description: formData.description || undefined 
+    });
   };
 
   const openManagePerms = async (role: any) => {

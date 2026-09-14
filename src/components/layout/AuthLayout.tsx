@@ -5,7 +5,7 @@ export function AuthLayout() {
     <div className="min-h-screen flex flex-col items-center justify-center bg-background text-foreground overflow-hidden">
       <div className="w-full max-w-md px-4 z-10">
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-semibold tracking-tight">Sisenco Digital</h1>
+          <h1 className="text-3xl font-semibold tracking-tight">Team Management System</h1>
           <p className="text-muted-foreground mt-2 font-mono text-sm">Workspace Authentication</p>
         </div>
         
