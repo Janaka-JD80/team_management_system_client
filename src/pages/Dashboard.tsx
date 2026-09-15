@@ -2,9 +2,7 @@ import { useMemo } from 'react';
 import { useAuthStore } from '@/store/authStore';
 import { useDashboardSummary, useDashboardCharts } from '@/hooks/useAnalyticsQueries';
 import { startOfWeek, format } from 'date-fns';
-import { Activity, Users } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { useNavigate } from 'react-router-dom';
+import { Activity } from 'lucide-react';
 
 import { SummaryCards } from '@/components/dashboard/SummaryCards';
 import { TasksTrendChart } from '@/components/dashboard/TasksTrendChart';
@@ -17,7 +15,6 @@ const PIE_COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4
 
 export default function Dashboard() {
   const { user } = useAuthStore();
-  const navigate = useNavigate();
 
   // Compute dates for the current week
   const today = new Date();

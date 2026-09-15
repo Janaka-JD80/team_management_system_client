@@ -4,6 +4,7 @@
     "module": "esnext",
     "moduleResolution": "node",
     "verbatimModuleSyntax": false,
-    "types": ["jest"]
+    "esModuleInterop": true,
+    "types": ["jest", "vite/client"]
   }
 }

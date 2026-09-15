@@ -1,4 +1,3 @@
-import React from 'react';
 import type { TaskPlanned } from '@/types/reports';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';

@@ -34,7 +34,7 @@ describe('ReportHistory Component', () => {
         <ReportHistory />
       </MemoryRouter>
     );
-    expect(screen.getByText('No reports yet')).toBeInTheDocument();
+    expect(screen.getByText('No reports found')).toBeInTheDocument();
   });
 
   it('renders a list of reports correctly', () => {

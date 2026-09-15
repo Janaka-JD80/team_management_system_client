@@ -4,7 +4,7 @@ import { format, startOfWeek, subWeeks } from 'date-fns';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { Calendar as CalendarIcon, User, AlertCircle, Trophy, CheckSquare, ListTodo, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Calendar as CalendarIcon, User, AlertCircle, Trophy, ListTodo, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import type { TaskCompleted, TaskPlanned, Blocker, Achievement } from '@/types/reports';
 

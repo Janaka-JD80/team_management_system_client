@@ -5,6 +5,7 @@ module.exports = {
   moduleNameMapper: {
     '^@/lib/http$': '<rootDir>/tests/__mocks__/http.ts',
     '^@/(.*)$': '<rootDir>/src/$1',
+    '\\.css$': '<rootDir>/tests/__mocks__/styleMock.ts',
   },
   transform: {
     '^.+\\.tsx?$': ['ts-jest', {

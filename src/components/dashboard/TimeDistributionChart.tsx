@@ -31,12 +31,12 @@ export function TimeDistributionChart({ pieData, pieColors }: TimeDistributionCh
                   dataKey="value"
                   stroke="none"
                 >
-                  {pieData.map((entry, index) => (
+                  {pieData.map((_entry, index) => (
                     <Cell key={`cell-${index}`} fill={pieColors[index % pieColors.length]} />
                   ))}
                 </Pie>
                 <RechartsTooltip 
-                  formatter={(value: number) => [`${value} hrs`, 'Time Spent']}
+                  formatter={(value: any) => [`${value} hrs`, 'Time Spent']}
                   contentStyle={{ borderRadius: '8px', border: '1px solid hsl(var(--border))', backgroundColor: 'hsl(var(--background))' }}
                 />
               </PieChart>

@@ -47,10 +47,10 @@ export function WorkloadChart({ workloadData }: WorkloadChartProps) {
                 <Tooltip 
                   cursor={{ fill: 'transparent' }}
                   contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
-                  formatter={(value: number) => [`${value} hours`, 'Time Spent']}
+                  formatter={(value: any) => [`${value} hours`, 'Time Spent']}
                 />
                 <Bar dataKey="hours" radius={[4, 4, 0, 0]}>
-                  {chartData.map((entry, index) => (
+                  {chartData.map((_entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Bar>
