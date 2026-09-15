@@ -16,7 +16,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Calendar } from '@/components/ui/calendar';
 import { format, startOfWeek, endOfWeek, parse } from 'date-fns';
 import { cn } from '@/lib/utils';
-import { ChevronLeft, Save, Send, Briefcase, Clock, FileText, CalendarIcon } from 'lucide-react';
+import { ChevronLeft, Save, Send, Briefcase, Clock, FileText, CalendarIcon, AlertCircle } from 'lucide-react';
 export default function ReportEditor() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -144,6 +144,18 @@ export default function ReportEditor() {
           </Button>
         </div>
       </div>
+
+      {isEditing && existingReport?.latest_version?.manager_comment && (
+        <div className="bg-destructive/10 border-l-4 border-destructive p-4 rounded-r-md mt-2">
+          <div className="flex gap-3">
+            <AlertCircle className="h-5 w-5 text-destructive mt-0.5 shrink-0" />
+            <div>
+              <h3 className="font-semibold text-destructive">Manager Feedback</h3>
+              <p className="text-sm mt-1 text-destructive/90">{existingReport.latest_version.manager_comment}</p>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
         
