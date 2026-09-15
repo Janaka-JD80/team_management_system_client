@@ -12,8 +12,11 @@ import { TaskCompletedTable, emptyTaskCompleted } from '@/components/reports/Tas
 import { TaskPlannedList, emptyTaskPlanned } from '@/components/reports/TaskPlannedList';
 import { BlockersAchievementsForm } from '@/components/reports/BlockersAchievementsForm';
 import type { ReportCreate } from '@/types/reports';
-import { ChevronLeft, Save, Send, Briefcase, Clock, FileText } from 'lucide-react';
-
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Calendar } from '@/components/ui/calendar';
+import { format, startOfWeek, endOfWeek, parse } from 'date-fns';
+import { cn } from '@/lib/utils';
+import { ChevronLeft, Save, Send, Briefcase, Clock, FileText, CalendarIcon } from 'lucide-react';
 export default function ReportEditor() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -27,8 +30,8 @@ export default function ReportEditor() {
   const submitReport = useSubmitReport();
 
   const [formData, setFormData] = useState<ReportCreate>({
-    week_start_date: '',
-    week_end_date: '',
+    week_start_date: format(startOfWeek(new Date(), { weekStartsOn: 1 }), 'yyyy-MM-dd'),
+    week_end_date: format(endOfWeek(new Date(), { weekStartsOn: 1 }), 'yyyy-MM-dd'),
     project_id: null,
     tasks_completed: [{ ...emptyTaskCompleted }],
     tasks_planned: [{ ...emptyTaskPlanned }],
@@ -109,6 +112,11 @@ export default function ReportEditor() {
     });
   };
 
+  const selectedDateRange = {
+    from: formData.week_start_date ? parse(formData.week_start_date, 'yyyy-MM-dd', new Date()) : undefined,
+    to: formData.week_end_date ? parse(formData.week_end_date, 'yyyy-MM-dd', new Date()) : undefined,
+  };
+
   return (
     <div className="max-w-6xl mx-auto pb-16 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       
@@ -166,20 +174,44 @@ export default function ReportEditor() {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label>Week Start Date</Label>
-                <Input 
-                  type="date" 
-                  value={formData.week_start_date} 
-                  onChange={(e) => setFormData({ ...formData, week_start_date: e.target.value })} 
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>Week End Date</Label>
-                <Input 
-                  type="date" 
-                  value={formData.week_end_date} 
-                  onChange={(e) => setFormData({ ...formData, week_end_date: e.target.value })} 
-                />
+                <Label>Week Date Range</Label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant={"outline"}
+                      className={cn("w-full justify-start text-left font-normal", !selectedDateRange.from && "text-muted-foreground")}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {selectedDateRange.from ? (
+                        selectedDateRange.to ? (
+                          <>
+                            {format(selectedDateRange.from, "LLL dd, y")} -{" "}
+                            {format(selectedDateRange.to, "LLL dd, y")}
+                          </>
+                        ) : (
+                          format(selectedDateRange.from, "LLL dd, y")
+                        )
+                      ) : (
+                        <span>Pick a date range</span>
+                      )}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="range"
+                      defaultMonth={selectedDateRange.from}
+                      selected={selectedDateRange}
+                      onSelect={(d) => {
+                        setFormData({
+                          ...formData,
+                          week_start_date: d?.from ? format(d.from, 'yyyy-MM-dd') : '',
+                          week_end_date: d?.to ? format(d.to, 'yyyy-MM-dd') : ''
+                        });
+                      }}
+                      numberOfMonths={1}
+                    />
+                  </PopoverContent>
+                </Popover>
               </div>
             </CardContent>
           </Card>
