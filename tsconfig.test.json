@@ -6,6 +6,9 @@
     "verbatimModuleSyntax": false,
     "esModuleInterop": true,
     "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
     "types": ["jest", "vite/client"]
   }
 }
