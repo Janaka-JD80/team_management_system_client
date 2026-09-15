@@ -163,7 +163,7 @@ export default function ReportHistory() {
                           <Button
                             variant="outline"
                             size="sm"
-                            onClick={(e) => { e.stopPropagation(); navigate(`/reports/${report.report_id}/edit`); }}
+                            onClick={(e: any) => { e.stopPropagation(); navigate(`/reports/${report.report_id}/edit`); }}
                           >
                             Edit
                           </Button>
@@ -171,7 +171,7 @@ export default function ReportHistory() {
                           <Button
                             variant="secondary"
                             size="sm"
-                            onClick={(e) => { e.stopPropagation(); navigate(`/reports/${report.report_id}/view`); }}
+                            onClick={(e: any) => { e.stopPropagation(); navigate(`/reports/${report.report_id}/view`); }}
                           >
                             View
                           </Button>
