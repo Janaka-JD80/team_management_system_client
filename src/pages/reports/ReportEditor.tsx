@@ -202,11 +202,13 @@ export default function ReportEditor() {
                       defaultMonth={selectedDateRange.from}
                       selected={selectedDateRange}
                       onSelect={(d) => {
-                        setFormData({
-                          ...formData,
-                          week_start_date: d?.from ? format(d.from, 'yyyy-MM-dd') : '',
-                          week_end_date: d?.to ? format(d.to, 'yyyy-MM-dd') : ''
-                        });
+                        if (d?.from) {
+                          setFormData({
+                            ...formData,
+                            week_start_date: format(startOfWeek(d.from, { weekStartsOn: 1 }), 'yyyy-MM-dd'),
+                            week_end_date: format(endOfWeek(d.from, { weekStartsOn: 1 }), 'yyyy-MM-dd')
+                          });
+                        }
                       }}
                       numberOfMonths={1}
                     />

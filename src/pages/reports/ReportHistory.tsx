@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
-import { format } from 'date-fns';
+import { format, startOfWeek, endOfWeek } from 'date-fns';
 import { CalendarIcon, ChevronLeft, ChevronRight, FileText, Plus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
@@ -26,8 +26,8 @@ export default function ReportHistory() {
   const [page, setPage] = useState(1);
   const limit = 10;
   const [date, setDate] = useState<DateRange | undefined>({
-    from: new Date(),
-    to: new Date()
+    from: startOfWeek(new Date(), { weekStartsOn: 1 }),
+    to: endOfWeek(new Date(), { weekStartsOn: 1 })
   });
 
   const { data: reports = [], isLoading, isError } = useMyReports({
@@ -94,7 +94,17 @@ export default function ReportHistory() {
                   mode="range"
                   defaultMonth={date?.from}
                   selected={date}
-                  onSelect={(d) => { setDate(d); setPage(1); }}
+                  onSelect={(d) => { 
+                    if (d?.from) {
+                      setDate({
+                        from: startOfWeek(d.from, { weekStartsOn: 1 }),
+                        to: endOfWeek(d.from, { weekStartsOn: 1 })
+                      });
+                    } else {
+                      setDate(undefined);
+                    }
+                    setPage(1); 
+                  }}
                   numberOfMonths={1}
                 />
               </PopoverContent>

@@ -1,4 +1,4 @@
-import { format } from 'date-fns';
+import { format, startOfWeek, endOfWeek } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
@@ -111,7 +111,17 @@ export function DashboardFilters({
               mode="range"
               defaultMonth={date?.from}
               selected={date}
-              onSelect={(d) => { setDate(d); setPage(1); }}
+              onSelect={(d) => {
+                if (d?.from) {
+                  setDate({
+                    from: startOfWeek(d.from, { weekStartsOn: 1 }),
+                    to: endOfWeek(d.from, { weekStartsOn: 1 })
+                  });
+                } else {
+                  setDate(undefined);
+                }
+                setPage(1);
+              }}
               numberOfMonths={1}
             />
           </PopoverContent>

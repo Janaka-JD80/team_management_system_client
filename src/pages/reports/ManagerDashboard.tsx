@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useAllReports, useManagerReview } from '@/hooks/useReportQueries';
 import { useAllProjects } from '@/hooks/useProjectQueries';
-import { format } from 'date-fns';
+import { format, startOfWeek, endOfWeek } from 'date-fns';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import type { DateRange } from 'react-day-picker';
 import type { ReportResponse } from '@/types/reports';
@@ -32,8 +32,8 @@ export default function ManagerDashboard() {
   const [projectIdFilter, setProjectIdFilter] = useState<string>('all');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [date, setDate] = useState<DateRange | undefined>({
-    from: new Date(),
-    to: new Date()
+    from: startOfWeek(new Date(), { weekStartsOn: 1 }),
+    to: endOfWeek(new Date(), { weekStartsOn: 1 })
   });
 
   const { data: projectsData = [] } = useAllProjects();

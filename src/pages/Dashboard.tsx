@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useAuthStore } from '@/store/authStore';
 import { useDashboardSummary, useDashboardCharts } from '@/hooks/useAnalyticsQueries';
-import { startOfWeek, format } from 'date-fns';
+import { startOfWeek, endOfWeek, format } from 'date-fns';
 import { Activity } from 'lucide-react';
 
 import { SummaryCards } from '@/components/dashboard/SummaryCards';
@@ -19,7 +19,7 @@ export default function Dashboard() {
   // Compute dates for the current week
   const today = new Date();
   const weekStartStr = format(startOfWeek(today, { weekStartsOn: 1 }), 'yyyy-MM-dd');
-  const endDateStr = format(today, 'yyyy-MM-dd'); // Trend up to today
+  const endDateStr = format(endOfWeek(today, { weekStartsOn: 1 }), 'yyyy-MM-dd'); // Trend up to end of week
 
   const { data: summary, isLoading: isLoadingSummary } = useDashboardSummary(weekStartStr);
   const { data: charts, isLoading: isLoadingCharts } = useDashboardCharts(endDateStr);
